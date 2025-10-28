@@ -1,6 +1,6 @@
 # OpenCode Agent Session Documentation
 
-This document provides a detailed analysis of the data models involved in an OpenCode agent session, based on the `bicabone/opencode-sdk-go` repository. It is intended to guide the development of a UI that can display this data and interact with the agent session, including interruption and resumption.
+This document provides a detailed analysis of the data models involved in an OpenCode agent session, based on the `sst/opencode-sdk-go` repository. It is intended to guide the development of a UI that can display this data and interact with the agent session, including interruption and resumption.
 
 ## Session Lifecycle
 
@@ -15,7 +15,7 @@ A session represents a single, stateful interaction with an OpenCode agent. It i
 
 ### Data Models
 
-The core data models are defined in [`session.go`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go). The following sections detail the most important structs.
+The core data models are defined in [`session.go`](./session.go). The following sections detail the most important structs.
 
 #### Session
 
@@ -33,7 +33,7 @@ The `Session` struct represents the state of a conversation.
 | `Revert` | `SessionRevert` | Information about a reverted message. |
 | `Share` | `SessionShare` | Information about a shared session. |
 
-**Source:** [`session.go#L1286-L1297`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L1286-L1297)
+**Source:** [`session.go#L1286-L1297`](./session.go#L1286-L1297)
 
 #### Message
 
@@ -56,7 +56,7 @@ The `Message` struct represents a single message in the conversation. It can be 
 | `System` | `interface{}` | System messages. Can be `[]string`. |
 | `Tokens` | `interface{}` | Token usage information. Can be `AssistantMessageTokens`. |
 
-**Source:** [`session.go#L914-L937`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L914-L937)
+**Source:** [`session.go#L914-L937`](./session.go#L914-L937)
 
 #### Part
 
@@ -70,7 +70,7 @@ The `Part` struct is a generic container for different types of message content.
 | `Type` | `PartType` | The type of the part. See the table below for possible values. |
 | `...` | `...` | Other fields depend on the `Type` of the part. |
 
-**Source:** [`session.go#L1015-L1045`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L1015-L1045)
+**Source:** [`session.go#L1015-L1045`](./session.go#L1015-L1045)
 
 #### Part Types
 
@@ -88,7 +88,7 @@ The `PartType` enum determines the content of a `Part`. The following table list
 | `patch` | `PartPatchPart` | A patch to a file. |
 | `agent` | `AgentPart` | Information about the agent. |
 
-**Source:** [`session.go#L1193-L1205`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L1193-L1205)
+**Source:** [`session.go#L1193-L1205`](./session.go#L1193-L1205)
 
 ### Tool State Transitions
 
@@ -101,7 +101,7 @@ The `ToolPart` is particularly important for understanding the agent's actions. 
 
 These state transitions are communicated through `message.part.updated` events. By monitoring these events, a UI can display the real-time status of each tool call.
 
-**Source:** [`session.go#L1962-L1969`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L1962-L1969)
+**Source:** [`session.go#L1962-L1969`](./session.go#L1962-L1969)
 
 ## Interruption and Resumption
 
@@ -115,7 +115,7 @@ The `Abort` method on the `SessionService` is used to interrupt a running sessio
 func (r *SessionService) Abort(ctx context.Context, id string, body SessionAbortParams, opts ...option.RequestOption) (res *bool, err error)
 ```
 
-**Source:** [`session.go#L85`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L85)
+**Source:** [`session.go#L85`](./session.go#L85)
 
 ### Revert and Unrevert
 
@@ -125,7 +125,7 @@ The `Revert` method allows you to undo a message and revert the session to a pre
 func (r *SessionService) Revert(ctx context.Context, id string, params SessionRevertParams, opts ...option.RequestOption) (res *Session, err error)
 ```
 
-**Source:** [`session.go#L185`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L185)
+**Source:** [`session.go#L185`](./session.go#L185)
 
 The `Unrevert` method restores all reverted messages, effectively redoing the reverted actions.
 
@@ -133,7 +133,7 @@ The `Unrevert` method restores all reverted messages, effectively redoing the re
 func (r *SessionService) Unrevert(ctx context.Context, id string, body SessionUnrevertParams, opts ...option.RequestOption) (res *Session, err error)
 ```
 
-**Source:** [`session.go#L233`](https://github.com/bicabone/opencode-sdk-go/blob/main/session.go#L233)
+**Source:** [`session.go#L233`](./session.go#L233)
 
 ### Resume
 
@@ -147,7 +147,7 @@ Real-time updates to the session state are communicated through a server-sent ev
 func (r *EventService) ListStreaming(ctx context.Context, query EventListParams, opts ...option.RequestOption) (stream *ssestream.Stream[EventListResponse])
 ```
 
-**Source:** [`event.go#L42`](https://github.com/bicabone/opencode-sdk-go/blob/main/event.go#L42)
+**Source:** [`event.go#L42`](./event.go#L42)
 
 The `EventListResponse` is a union type that can represent many different types of events. The most important events for building a UI are:
 
@@ -162,4 +162,4 @@ By handling these events, a UI can stay in sync with the state of the agent sess
 
 ## Conclusion
 
-This document has provided a comprehensive overview of the data models and mechanics of an OpenCode agent session. By understanding these concepts, developers can build powerful and interactive UIs that leverage the full capabilities of the OpenCode platform. For further details, please refer to the source code in the `bicabone/opencode-sdk-go` repository.
+This document has provided a comprehensive overview of the data models and mechanics of an OpenCode agent session. By understanding these concepts, developers can build powerful and interactive UIs that leverage the full capabilities of the OpenCode platform. For further details, please refer to the source code in this repository.
